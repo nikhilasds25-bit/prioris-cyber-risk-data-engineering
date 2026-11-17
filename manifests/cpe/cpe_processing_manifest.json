@@ -1,0 +1,50 @@
+{
+  "project": "PRIORIS",
+  "component": "CPE Data Processing",
+  "processing_date": "2026-11-17",
+  "sources": {
+    "cpe_dictionary": {
+      "name": "NVD CPE Dictionary 2.0",
+      "zip_url": "https://nvd.nist.gov/feeds/json/cpe/2.0/nvdcpe-2.0.zip",
+      "metadata_url": "https://nvd.nist.gov/feeds/json/cpe/2.0/nvdcpe-2.0.meta",
+      "metadata_sha256": "7e31eba82399910d85faa37433ef168cfbd8b5b02ed38e47590153390d80f7ae",
+      "uncompressed_size_bytes": 912280910,
+      "chunks_processed": 18,
+      "records_processed": 1876425,
+      "duplicate_cpe_ids": 0,
+      "output": "data/processed/cpe_dictionary.parquet"
+    },
+    "cpe_match": {
+      "name": "NVD CPE Match 2.0",
+      "zip_url": "https://nvd.nist.gov/feeds/json/cpematch/2.0/nvdcpematch-2.0.zip",
+      "metadata_url": "https://nvd.nist.gov/feeds/json/cpematch/2.0/nvdcpematch-2.0.meta",
+      "metadata_sha256": "413b758a605f76e8b5bf3cbc848adb728f5647efe1ebc9c5013ce32f366754e9",
+      "uncompressed_size_bytes": 3930728375,
+      "chunks_processed": 75,
+      "criteria_records": 677659,
+      "cpe_name_associations": 32175781,
+      "criteria_without_matches": 218392,
+      "duplicate_criteria": 0,
+      "outputs": [
+        "data/processed/cpe_match_criteria.parquet",
+        "data/processed/cpe_match_names.parquet"
+      ]
+    }
+  },
+  "validation": {
+    "dictionary_parquet_rows": 1876425,
+    "criteria_parquet_rows": 677659,
+    "names_parquet_rows": 32175781,
+    "missing_criteria_references": 0,
+    "null_criteria_references": 0,
+    "referential_integrity": "PASS"
+  },
+  "environment": {
+    "python": "3.13.13",
+    "requests": "2.34.2",
+    "ijson": "3.6.0",
+    "pyarrow": "26.0.1",
+    "pandas": "3.1.1",
+    "tqdm": "4.70.1"
+  }
+}
