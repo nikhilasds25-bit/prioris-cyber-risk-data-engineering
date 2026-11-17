@@ -304,3 +304,20 @@ The associated CPE names and identifiers can then be related to entries in the C
 
 Together, these datasets provide standardized product identification and matching information for the vulnerability-to-asset matching stage.
 
+## 10. Downloading the Processed Parquet Datasets
+
+The full processed Parquet outputs are hosted in Google Drive rather than committed to Git, because the files are large.
+
+**Shared dataset folder:** https://drive.google.com/drive/folders/1hexhYeA95TEVwVs4YQlICWw3W6bXL0tB?usp=sharing
+
+The folder contains:
+
+| File | Records | Approximate size |
+|---|---:|---:|
+| `cpe_dictionary.parquet` | 1,876,425 | 135 MB |
+| `cpe_match_criteria.parquet` | 677,659 | 46 MB |
+| `cpe_match_names.parquet` | 32,175,781 | 1.19 GB |
+
+Access is restricted to invited Google accounts. Team members should open the folder using the Google account that was granted access, download the required files, and place them in the project's `data/processed/` directory before running the validation or integration scripts.
+
+Do not commit the full Parquet files or raw NVD ZIP archives to the Git repository.
