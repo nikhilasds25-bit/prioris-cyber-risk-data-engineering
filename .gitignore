@@ -1,0 +1,25 @@
+# Raw datasets
+data/raw/
+data/processed/
+data/temp/
+
+# Generated Parquet files
+*.parquet
+
+# Python cache and virtual environments
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Logs
+logs/
+*.log
+
+# Temporary files
+*.partial
+*.tmp
+
+# Operating system files
+.DS_Store
+Thumbs.db
