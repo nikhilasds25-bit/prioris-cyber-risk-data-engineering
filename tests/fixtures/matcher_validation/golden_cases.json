@@ -1,0 +1,636 @@
+{
+  "schema_version": 1,
+  "snapshot_date": "2026-10-19",
+  "source_files": {
+    "nvd_general.json": "3498da2cace38278d8c7c46a89c4d53f333095f475847f0dde4e652651f01188",
+    "nvd_known_exploited.json": "ad24d823faf53e143664794fc786db365ac0f229c37743768912734846226bc4"
+  },
+  "default_reference_ids": [
+    "nist_cpe_name_matching",
+    "nvd_cpe_faq",
+    "nvd_products_api",
+    "nvd_vulnerability_api",
+    "nvd_api_schema",
+    "openssl_security_advisory",
+    "openssl_release_history"
+  ],
+  "references": {
+    "nist_cpe_name_matching": {
+      "title": "NIST IR 7696, Common Platform Enumeration: Name Matching Specification Version 2.3",
+      "url": "https://csrc.nist.gov/pubs/ir/7696/final"
+    },
+    "nvd_cpe_faq": {
+      "title": "NVD CPE FAQs",
+      "url": "https://nvd.nist.gov/general/faq-sections/cpe-faqs",
+      "note": "The page rendered only the NVD application shell in this environment; no FAQ-specific claim is based on inaccessible page text."
+    },
+    "nvd_products_api": {
+      "title": "NVD Products and Match Criteria API documentation",
+      "url": "https://nvd.nist.gov/developers/products",
+      "note": "The page rendered only the NVD application shell in this environment; the staged response schema and fields are recorded directly from the snapshot."
+    },
+    "nvd_vulnerability_api": {
+      "title": "NVD Vulnerability API documentation",
+      "url": "https://nvd.nist.gov/developers/vulnerabilities"
+    },
+    "nvd_cve_api_records": {
+      "title": "NVD CVE API 2.0 individual record endpoint",
+      "url_template": "https://services.nvd.nist.gov/rest/json/cves/2.0?cveId={cve_id}"
+    },
+    "nvd_api_schema": {
+      "title": "NVD Vulnerability Data API 2.0 JSON Schema",
+      "url": "https://csrc.nist.gov/schema/nvd/api/2.0/cve_api_json_2.0.schema",
+      "note": "The schema identifies configuration and node AND/OR operators and boolean negate fields. The node definition does not define a recursive nodes property, so deeper child-node templates are not validated by this schema. This is not treated as proof that additional fields are prohibited."
+    },
+    "openssl_security_advisory": {
+      "title": "OpenSSL Security Advisory, 7 April 2014 (CVE-2014-0160)",
+      "url": "https://www.openssl.org/news/secadv/20140407.txt"
+    },
+    "openssl_release_history": {
+      "title": "OpenSSL 1.0.1 upstream NEWS release history",
+      "url": "https://raw.githubusercontent.com/openssl/openssl/OpenSSL_1_0_1-stable/NEWS"
+    }
+  },
+  "source_terms": {
+    "anisha": {
+      "source": {"cve_id": "CVE-2025-0168", "configuration_index": 0, "term_index": 0},
+      "term": {
+        "vulnerable": true,
+        "criteria": "cpe:2.3:a:anisha:job_recruitment:1.0:*:*:*:*:*:*:*",
+        "matchCriteriaId": "56E6381D-BF5F-4DC1-A525-4DEDA44D5C56"
+      }
+    },
+    "travel_tour": {
+      "source": {"cve_id": "CVE-2024-11846", "configuration_index": 0, "term_index": 0},
+      "term": {
+        "vulnerable": true,
+        "criteria": "cpe:2.3:a:goodlayers:travel_tour:*:*:*:*:*:wordpress:*:*",
+        "versionEndExcluding": "5.2.4",
+        "matchCriteriaId": "0252A01D-9FF2-4DA2-8EAD-0E02372742BF"
+      }
+    },
+    "wp_enable_svg": {
+      "source": {"cve_id": "CVE-2024-11184", "configuration_index": 0, "term_index": 0},
+      "term": {
+        "vulnerable": true,
+        "criteria": "cpe:2.3:a:wp_enable_svg_project:wp_enable_svg:*:*:*:*:*:wordpress:*:*",
+        "versionEndIncluding": "0.7",
+        "matchCriteriaId": "DDD2E20B-9C67-48EF-9B9C-A29EF29FCFFC"
+      }
+    },
+    "hp_openview": {
+      "source": {"cve_id": "CVE-2005-2773", "configuration_index": 0, "term_index": 0},
+      "term": {
+        "vulnerable": true,
+        "criteria": "cpe:2.3:a:hp:openview_network_node_manager:*:*:*:*:*:*:*:*",
+        "versionStartIncluding": "6.2",
+        "versionEndIncluding": "7.50",
+        "matchCriteriaId": "15973175-E70A-41C5-AFF2-4F22CB4520E0"
+      }
+    },
+    "linux_kernel": {
+      "source": {"cve_id": "CVE-2014-0196", "configuration_index": 0, "term_index": 0},
+      "term": {
+        "vulnerable": true,
+        "criteria": "cpe:2.3:o:linux:linux_kernel:*:*:*:*:*:*:*:*",
+        "versionStartExcluding": "2.6.31",
+        "versionEndExcluding": "3.2.59",
+        "matchCriteriaId": "FFDB0B31-FFF7-471B-9352-29099002BED7"
+      }
+    },
+    "openssl": {
+      "source": {"cve_id": "CVE-2014-0160", "configuration_index": 0, "term_index": 0},
+      "term": {
+        "vulnerable": true,
+        "criteria": "cpe:2.3:a:openssl:openssl:*:*:*:*:*:*:*:*",
+        "versionEndExcluding": "1.0.1g",
+        "versionStartIncluding": "1.0.1",
+        "matchCriteriaId": "9EE79AC6-5484-4A53-8333-373DAD1B5649"
+      }
+    },
+    "dlink_firmware": {
+      "source": {"cve_id": "CVE-2024-13102", "configuration_index": 0, "term_index": 0},
+      "term": {
+        "vulnerable": true,
+        "criteria": "cpe:2.3:o:dlink:dir-816_firmware:1.10cnb05_r1b011d88210:*:*:*:*:*:*:*",
+        "matchCriteriaId": "6494A725-3860-4428-A0F3-076605CAF7F2"
+      }
+    },
+    "dlink_hardware": {
+      "source": {"cve_id": "CVE-2024-13102", "configuration_index": 0, "term_index": 1},
+      "term": {
+        "vulnerable": false,
+        "criteria": "cpe:2.3:h:dlink:dir-816:a2:*:*:*:*:*:*:*",
+        "matchCriteriaId": "1A3AC507-7219-401E-AC60-12D96382E4B7"
+      }
+    },
+    "windows_2000": {
+      "source": {"cve_id": "CVE-2002-0367", "configuration_index": 0, "term_index": 0},
+      "term": {
+        "vulnerable": true,
+        "criteria": "cpe:2.3:o:microsoft:windows_2000:-:*:*:*:*:*:*:*",
+        "matchCriteriaId": "685F1981-EA61-4A00-89F8-A748A88962F8"
+      }
+    },
+    "windows_nt_4": {
+      "source": {"cve_id": "CVE-2002-0367", "configuration_index": 0, "term_index": 1},
+      "term": {
+        "vulnerable": true,
+        "criteria": "cpe:2.3:o:microsoft:windows_nt:4.0:*:*:*:*:*:*:*",
+        "matchCriteriaId": "E53CDA8E-50A8-4509-B070-CCA5604FFB21"
+      }
+    },
+    "windows_nt_4_terminal": {
+      "source": {"cve_id": "CVE-2002-0367", "configuration_index": 0, "term_index": 2},
+      "term": {
+        "vulnerable": true,
+        "criteria": "cpe:2.3:o:microsoft:windows_nt:4.0:-:*:*:terminal_server:*:*:*",
+        "matchCriteriaId": "E30F6C9C-3371-44FF-AD0B-3CAA0AB6F1B8"
+      }
+    }
+  },
+  "source_configurations": {
+    "dlink_and": {
+      "source": {"cve_id": "CVE-2024-13102", "configuration_index": 0},
+      "configuration": {
+        "operator": "AND",
+        "nodes": [
+          {
+            "operator": "OR",
+            "negate": false,
+            "cpeMatch": [
+              {
+                "vulnerable": true,
+                "criteria": "cpe:2.3:o:dlink:dir-816_firmware:1.10cnb05_r1b011d88210:*:*:*:*:*:*:*",
+                "matchCriteriaId": "6494A725-3860-4428-A0F3-076605CAF7F2"
+              }
+            ]
+          },
+          {
+            "operator": "OR",
+            "negate": false,
+            "cpeMatch": [
+              {
+                "vulnerable": false,
+                "criteria": "cpe:2.3:h:dlink:dir-816:a2:*:*:*:*:*:*:*",
+                "matchCriteriaId": "1A3AC507-7219-401E-AC60-12D96382E4B7"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "windows_nt_or": {
+      "source": {"cve_id": "CVE-2002-0367", "configuration_index": 0},
+      "configuration": {
+        "nodes": [
+          {
+            "operator": "OR",
+            "negate": false,
+            "cpeMatch": [
+              {
+                "vulnerable": true,
+                "criteria": "cpe:2.3:o:microsoft:windows_2000:-:*:*:*:*:*:*:*",
+                "matchCriteriaId": "685F1981-EA61-4A00-89F8-A748A88962F8"
+              },
+              {
+                "vulnerable": true,
+                "criteria": "cpe:2.3:o:microsoft:windows_nt:4.0:*:*:*:*:*:*:*",
+                "matchCriteriaId": "E53CDA8E-50A8-4509-B070-CCA5604FFB21"
+              },
+              {
+                "vulnerable": true,
+                "criteria": "cpe:2.3:o:microsoft:windows_nt:4.0:-:*:*:terminal_server:*:*:*",
+                "matchCriteriaId": "E30F6C9C-3371-44FF-AD0B-3CAA0AB6F1B8"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "installations": {
+    "anisha_exact": {"asset_id": "asset-1", "cpe23_uri": "cpe:2.3:a:anisha:job_recruitment:1.0:*:*:*:*:*:*:*"},
+    "anisha_wrong_vendor": {"asset_id": "asset-1", "cpe23_uri": "cpe:2.3:a:other:job_recruitment:1.0:*:*:*:*:*:*:*"},
+    "anisha_wrong_product": {"asset_id": "asset-1", "cpe23_uri": "cpe:2.3:a:anisha:other:1.0:*:*:*:*:*:*:*"},
+    "anisha_wrong_version": {"asset_id": "asset-1", "cpe23_uri": "cpe:2.3:a:anisha:job_recruitment:1.1:*:*:*:*:*:*:*"},
+    "travel_5_2_3": {"asset_id": "asset-1", "cpe23_uri": "cpe:2.3:a:goodlayers:travel_tour:5.2.3:*:*:*:*:wordpress:*:*"},
+    "travel_5_2_4": {"asset_id": "asset-1", "cpe23_uri": "cpe:2.3:a:goodlayers:travel_tour:5.2.4:*:*:*:*:wordpress:*:*"},
+    "svg_0_7": {"asset_id": "asset-1", "cpe23_uri": "cpe:2.3:a:wp_enable_svg_project:wp_enable_svg:0.7:*:*:*:*:wordpress:*:*"},
+    "svg_0_8": {"asset_id": "asset-1", "cpe23_uri": "cpe:2.3:a:wp_enable_svg_project:wp_enable_svg:0.8:*:*:*:*:wordpress:*:*"},
+    "hp_6_1": {"asset_id": "asset-1", "cpe23_uri": "cpe:2.3:a:hp:openview_network_node_manager:6.1:*:*:*:*:*:*:*"},
+    "hp_6_2": {"asset_id": "asset-1", "cpe23_uri": "cpe:2.3:a:hp:openview_network_node_manager:6.2:*:*:*:*:*:*:*"},
+    "hp_7_50": {"asset_id": "asset-1", "cpe23_uri": "cpe:2.3:a:hp:openview_network_node_manager:7.50:*:*:*:*:*:*:*"},
+    "linux_2_6_31": {"asset_id": "asset-1", "cpe23_uri": "cpe:2.3:o:linux:linux_kernel:2.6.31:*:*:*:*:*:*:*"},
+    "linux_2_6_32": {"asset_id": "asset-1", "cpe23_uri": "cpe:2.3:o:linux:linux_kernel:2.6.32:*:*:*:*:*:*:*"},
+    "linux_3_2_59": {"asset_id": "asset-1", "cpe23_uri": "cpe:2.3:o:linux:linux_kernel:3.2.59:*:*:*:*:*:*:*"},
+    "openssl_1_0_1f": {"asset_id": "asset-1", "cpe23_uri": "cpe:2.3:a:openssl:openssl:1.0.1f:*:*:*:*:*:*:*"},
+    "openssl_1_0_1e": {"asset_id": "asset-1", "cpe23_uri": "cpe:2.3:a:openssl:openssl:1.0.1e:*:*:*:*:*:*:*"},
+    "openssl_1_0_1g": {"asset_id": "asset-1", "cpe23_uri": "cpe:2.3:a:openssl:openssl:1.0.1g:*:*:*:*:*:*:*"},
+    "dlink_firmware": {"asset_id": "asset-1", "cpe23_uri": "cpe:2.3:o:dlink:dir-816_firmware:1.10cnb05_r1b011d88210:*:*:*:*:*:*:*"},
+    "dlink_hardware": {"asset_id": "asset-1", "cpe23_uri": "cpe:2.3:h:dlink:dir-816:a2:*:*:*:*:*:*:*"},
+    "windows_nt_4": {"asset_id": "asset-1", "cpe23_uri": "cpe:2.3:o:microsoft:windows_nt:4.0:*:*:*:*:*:*:*"}
+  },
+  "cases": [
+    {
+      "id": "exact_nvd_cpe_match",
+      "status": "supported",
+      "kind": "criterion_match",
+      "source_term": "anisha",
+      "installations": ["anisha_exact"],
+      "expected": ["anisha_exact"],
+      "justification": "All eleven CPE attributes in the staged criterion and concrete installation agree; the numeric version is exact."
+    },
+    {
+      "id": "exact_vendor_mismatch",
+      "status": "supported",
+      "kind": "criterion_match",
+      "source_term": "anisha",
+      "installations": ["anisha_wrong_vendor"],
+      "expected": [],
+      "justification": "The vendor attribute differs from the exact staged CPE criterion."
+    },
+    {
+      "id": "exact_product_mismatch",
+      "status": "supported",
+      "kind": "criterion_match",
+      "source_term": "anisha",
+      "installations": ["anisha_wrong_product"],
+      "expected": [],
+      "justification": "The product attribute differs from the exact staged CPE criterion."
+    },
+    {
+      "id": "exact_version_mismatch",
+      "status": "supported",
+      "kind": "criterion_match",
+      "source_term": "anisha",
+      "installations": ["anisha_wrong_version"],
+      "expected": [],
+      "justification": "The CPE version attribute is exact in the staged criterion, so a different version is not equal."
+    },
+    {
+      "id": "component_asterisk_wildcard",
+      "status": "supported",
+      "kind": "component_match",
+      "source_term": "anisha",
+      "pattern": "job_*",
+      "actual": "job_recruitment",
+      "expected": true,
+      "justification": "The CPE component wildcard pattern matches a sequence of characters; this controlled pattern is not asserted to be a literal NVD criterion."
+    },
+    {
+      "id": "component_question_wildcard",
+      "status": "supported",
+      "kind": "component_match",
+      "source_term": "anisha",
+      "pattern": "job?recruitment",
+      "actual": "job_recruitment",
+      "expected": true,
+      "justification": "A single-character wildcard matches the underscore; this controlled pattern is not asserted to be a literal NVD criterion."
+    },
+    {
+      "id": "escaped_asterisk_is_literal",
+      "status": "supported",
+      "kind": "component_match",
+      "source_term": "anisha",
+      "pattern": "widget\\*",
+      "actual": "widget*",
+      "expected": true,
+      "justification": "The escaped metacharacter is treated literally under the CPE formatted-string representation."
+    },
+    {
+      "id": "escaped_question_is_literal",
+      "status": "supported",
+      "kind": "component_match",
+      "source_term": "anisha",
+      "pattern": "widget\\?",
+      "actual": "widgetX",
+      "expected": false,
+      "justification": "An escaped question mark is literal and therefore does not match a different trailing character."
+    },
+    {
+      "id": "escaped_colon_stays_in_cpe_component",
+      "status": "supported",
+      "kind": "cpe_term_match",
+      "source_term": "anisha",
+      "pattern_cpe": "cpe:2.3:a:anisha\\:lab:job_recruitment:1.0:*:*:*:*:*:*:*",
+      "actual_cpe": "cpe:2.3:a:anisha\\:lab:job_recruitment:1.0:*:*:*:*:*:*:*",
+      "expected": true,
+      "justification": "The escaped colon remains part of the vendor component during formatted-string parsing; this is a controlled derivative, not a staged literal criterion."
+    },
+    {
+      "id": "escaped_colon_component_exact_mismatch",
+      "status": "supported",
+      "kind": "cpe_term_match",
+      "source_term": "anisha",
+      "pattern_cpe": "cpe:2.3:a:anisha\\:lab:job_recruitment:1.0:*:*:*:*:*:*:*",
+      "actual_cpe": "cpe:2.3:a:anisha\\:labor:job_recruitment:1.0:*:*:*:*:*:*:*",
+      "expected": false,
+      "justification": "After parsing the escaped delimiter as vendor data, the vendor components are not equal."
+    },
+    {
+      "id": "version_end_exclusive_inside",
+      "status": "supported",
+      "kind": "criterion_match",
+      "source_term": "travel_tour",
+      "installations": ["travel_5_2_3"],
+      "expected": ["travel_5_2_3"],
+      "justification": "5.2.3 is numerically below the source criterion's versionEndExcluding 5.2.4 boundary."
+    },
+    {
+      "id": "version_end_exclusive_boundary",
+      "status": "supported",
+      "kind": "criterion_match",
+      "source_term": "travel_tour",
+      "installations": ["travel_5_2_4"],
+      "expected": [],
+      "justification": "The exclusive 5.2.4 upper boundary itself is not included."
+    },
+    {
+      "id": "version_end_inclusive_boundary",
+      "status": "supported",
+      "kind": "criterion_match",
+      "source_term": "wp_enable_svg",
+      "installations": ["svg_0_7"],
+      "expected": ["svg_0_7"],
+      "justification": "The source criterion explicitly includes version 0.7 at versionEndIncluding."
+    },
+    {
+      "id": "version_end_inclusive_above",
+      "status": "supported",
+      "kind": "criterion_match",
+      "source_term": "wp_enable_svg",
+      "installations": ["svg_0_8"],
+      "expected": [],
+      "justification": "Version 0.8 is above the source criterion's inclusive 0.7 upper boundary."
+    },
+    {
+      "id": "version_start_inclusive_boundary",
+      "status": "supported",
+      "kind": "criterion_match",
+      "source_term": "hp_openview",
+      "installations": ["hp_6_2"],
+      "expected": ["hp_6_2"],
+      "justification": "The source range includes its versionStartIncluding 6.2 lower boundary."
+    },
+    {
+      "id": "version_start_inclusive_below",
+      "status": "supported",
+      "kind": "criterion_match",
+      "source_term": "hp_openview",
+      "installations": ["hp_6_1"],
+      "expected": [],
+      "justification": "Version 6.1 is below the source range's inclusive 6.2 lower boundary."
+    },
+    {
+      "id": "version_start_exclusive_boundary",
+      "status": "supported",
+      "kind": "criterion_match",
+      "source_term": "linux_kernel",
+      "installations": ["linux_2_6_31"],
+      "expected": [],
+      "justification": "The source range excludes its versionStartExcluding 2.6.31 lower boundary."
+    },
+    {
+      "id": "version_start_exclusive_inside",
+      "status": "supported",
+      "kind": "criterion_match",
+      "source_term": "linux_kernel",
+      "installations": ["linux_2_6_32"],
+      "expected": ["linux_2_6_32"],
+      "justification": "Version 2.6.32 is above the exclusive 2.6.31 lower boundary and below the upper boundary."
+    },
+    {
+      "id": "version_end_exclusive_linux_boundary",
+      "status": "supported",
+      "kind": "criterion_match",
+      "source_term": "linux_kernel",
+      "installations": ["linux_3_2_59"],
+      "expected": [],
+      "justification": "The source range excludes its versionEndExcluding 3.2.59 upper boundary."
+    },
+    {
+      "id": "openssl_heartbleed_101f_before_101g",
+      "status": "supported",
+      "kind": "criterion_match",
+      "source_term": "openssl",
+      "installations": ["openssl_1_0_1f"],
+      "expected": ["openssl_1_0_1f"],
+      "reference_ids": ["nvd_cve_api_records", "nvd_api_schema", "openssl_security_advisory", "openssl_release_history"],
+      "investigation": {
+        "evidence": "NVD's CVE record states OpenSSL 1.0.1 before 1.0.1g and carries the staged 1.0.1 inclusive / 1.0.1g exclusive criterion. The OpenSSL advisory says 1.0.1 releases including 1.0.1f are affected and users should upgrade to 1.0.1g. Upstream NEWS records the 1.0.1f-to-1.0.1g release and CVE-2014-0160 fix.",
+        "decision": "A narrowly scoped comparison for this exact NVD matchCriteriaId and only the documented versions 1.0.1, 1.0.1f, and 1.0.1g is defensible. No generic suffix or lexical ordering is inferred."
+      },
+      "justification": "The OpenSSL advisory directly identifies 1.0.1f as affected and 1.0.1g as the required upgrade. The implementation therefore evaluates this one exact NVD criterion with a source-backed version table."
+    },
+    {
+      "id": "openssl_heartbleed_101g_exclusive_boundary",
+      "status": "supported",
+      "kind": "criterion_match",
+      "source_term": "openssl",
+      "installations": ["openssl_1_0_1g"],
+      "expected": [],
+      "reference_ids": ["nvd_cve_api_records", "nvd_api_schema", "openssl_security_advisory", "openssl_release_history"],
+      "investigation": {
+        "evidence": "The staged NVD criterion has versionEndExcluding 1.0.1g; the OpenSSL advisory names 1.0.1g as the upgrade version, and upstream NEWS records the f-to-g release boundary.",
+        "decision": "The exact 1.0.1g boundary is excluded for the specific staged criterion."
+      },
+      "justification": "The locally staged criterion is explicitly exclusive at version 1.0.1g."
+    },
+    {
+      "id": "openssl_unlisted_alpha_suffix_remains_unsupported",
+      "status": "unsupported",
+      "kind": "criterion_match",
+      "source_term": "openssl",
+      "installations": ["openssl_1_0_1e"],
+      "expected": null,
+      "expected_unsupported_assets": ["asset-1"],
+      "reference_ids": ["nvd_cve_api_records", "openssl_security_advisory", "openssl_release_history"],
+      "investigation": {
+        "evidence": "The advisory explicitly names 1.0.1f among affected releases and 1.0.1g as the upgrade target; the constrained implementation does not encode an unverified 1.0.1e comparison.",
+        "decision": "Keep unlisted suffixes unsupported rather than extrapolating a generic alphabetic release order."
+      },
+      "justification": "Evidence sufficient for the 1.0.1f / 1.0.1g boundary does not authorize general ordering of other suffixes."
+    },
+    {
+      "id": "numeric_version_zero_padding_equivalence",
+      "status": "pending_review",
+      "kind": "version_compare",
+      "left": "1.0",
+      "right": "1.0.0",
+      "expected": null,
+      "reference_ids": ["nist_cpe_name_matching", "nvd_api_schema"],
+      "investigation": {
+        "evidence": "The NVD schema represents version bounds as strings and does not define a universal numeric component-padding equivalence rule. CPE Name Matching specifies name attribute matching, not a product-independent software release ordering.",
+        "decision": "No expected equivalence/order is asserted. The matcher now reports different component counts as unsupported instead of padding with zero."
+      },
+      "justification": "Whether 1.0 and 1.0.0 denote equivalent or ordered releases is product-specific and unsupported by the cited general format/schema evidence."
+    },
+    {
+      "id": "dlink_and_with_supporting_hardware",
+      "status": "supported",
+      "kind": "configuration_match",
+      "source_configuration": "dlink_and",
+      "installations": ["dlink_firmware", "dlink_hardware"],
+      "asset_id": "asset-1",
+      "expected": {"satisfied": true, "vulnerable_installations": ["dlink_firmware"]},
+      "justification": "This verbatim staged AND configuration requires the vulnerable firmware criterion and the non-vulnerable hardware applicability criterion; only the vulnerable installation is emitted."
+    },
+    {
+      "id": "dlink_and_missing_supporting_hardware",
+      "status": "supported",
+      "kind": "configuration_match",
+      "source_configuration": "dlink_and",
+      "installations": ["dlink_firmware"],
+      "asset_id": "asset-1",
+      "expected": {"satisfied": false, "vulnerable_installations": []},
+      "justification": "The same staged AND configuration is not satisfied when its non-vulnerable supporting hardware criterion is absent."
+    },
+    {
+      "id": "staged_windows_or_configuration",
+      "status": "supported",
+      "kind": "configuration_match",
+      "source_configuration": "windows_nt_or",
+      "installations": ["windows_nt_4"],
+      "asset_id": "asset-1",
+      "expected": {"satisfied": true, "vulnerable_installations": ["windows_nt_4"]},
+      "justification": "The staged configuration has an OR node with three alternatives; the installed Windows NT 4.0 criterion satisfies one alternative."
+    },
+    {
+      "id": "nested_and_or_positive",
+      "status": "unsupported",
+      "kind": "configuration_template",
+      "source_terms": ["anisha", "dlink_hardware"],
+      "template": {
+        "operator": "AND",
+        "nodes": [
+          {"operator": "OR", "cpeMatch": [{"$term": "anisha"}]},
+          {"operator": "AND", "nodes": [
+            {"operator": "OR", "cpeMatch": [{"$term": "dlink_hardware"}]},
+            {"operator": "OR", "cpeMatch": [{"$term": "anisha"}]}
+          ]}
+        ]
+      },
+      "installations": ["anisha_exact", "dlink_hardware"],
+      "asset_id": "asset-1",
+      "expected": null,
+      "reference_ids": ["nvd_api_schema"],
+      "investigation": {
+        "evidence": "The official NVD 2.0 schema defines a configuration's nodes as node objects, while the node definition includes operator, negate, and cpeMatch properties but does not define recursive child nodes.",
+        "decision": "The schema does not validate this deeper structure or establish its applicability semantics. Do not score the matcher result; route any such encountered input to manual review."
+      },
+      "justification": "This template includes recursive nodes on a node; the authoritative schema does not describe or validate that shape."
+    },
+    {
+      "id": "nested_and_or_missing_child",
+      "status": "unsupported",
+      "kind": "configuration_template",
+      "source_terms": ["anisha", "dlink_hardware"],
+      "template": {
+        "operator": "AND",
+        "nodes": [
+          {"operator": "OR", "cpeMatch": [{"$term": "anisha"}]},
+          {"operator": "AND", "nodes": [
+            {"operator": "OR", "cpeMatch": [{"$term": "dlink_hardware"}]},
+            {"operator": "OR", "cpeMatch": [{"$term": "anisha"}]}
+          ]}
+        ]
+      },
+      "installations": ["anisha_exact"],
+      "asset_id": "asset-1",
+      "expected": null,
+      "reference_ids": ["nvd_api_schema"],
+      "investigation": {
+        "evidence": "The official NVD 2.0 schema's node definition does not define a child-nodes property.",
+        "decision": "The schema does not validate the nested AND template or establish the missing-child outcome; route such input to manual review."
+      },
+      "justification": "The nested child node is not described by the published NVD API schema; the fixture does not establish an NVD evaluation result."
+    },
+    {
+      "id": "negated_support_absent",
+      "status": "pending_review",
+      "kind": "configuration_template",
+      "source_terms": ["anisha", "dlink_hardware"],
+      "template": {
+        "operator": "AND",
+        "nodes": [
+          {"operator": "OR", "cpeMatch": [{"$term": "anisha"}]},
+          {"operator": "OR", "negate": true, "cpeMatch": [{"$term": "dlink_hardware"}]}
+        ]
+      },
+      "installations": ["anisha_exact"],
+      "asset_id": "asset-1",
+      "expected": null,
+      "reference_ids": ["nvd_api_schema"],
+      "investigation": {
+        "evidence": "The official NVD schema confirms negate is a boolean field on configurations and nodes, but does not define its evaluation semantics. No true negated node occurs in the staged snapshot.",
+        "decision": "Do not assert the truth outcome or emit a confirmed candidate from negated configurations until NVD documents or a representative authoritative example validates the semantics."
+      },
+      "justification": "The schema establishes the field's type, not the applicability-expression semantics required to score negation."
+    },
+    {
+      "id": "negated_support_present",
+      "status": "pending_review",
+      "kind": "configuration_template",
+      "source_terms": ["anisha", "dlink_hardware"],
+      "template": {
+        "operator": "AND",
+        "nodes": [
+          {"operator": "OR", "cpeMatch": [{"$term": "anisha"}]},
+          {"operator": "OR", "negate": true, "cpeMatch": [{"$term": "dlink_hardware"}]}
+        ]
+      },
+      "installations": ["anisha_exact", "dlink_hardware"],
+      "asset_id": "asset-1",
+      "expected": null,
+      "reference_ids": ["nvd_api_schema"],
+      "investigation": {
+        "evidence": "The official NVD schema confirms negate is a boolean field on configurations and nodes, but does not define its evaluation semantics. No true negated node occurs in the staged snapshot.",
+        "decision": "Do not assert the truth outcome or emit a confirmed candidate from negated configurations until NVD documents or a representative authoritative example validates the semantics."
+      },
+      "justification": "The schema establishes the field's type, not the applicability-expression semantics required to score negation."
+    },
+    {
+      "id": "duplicate_relationships_deduplicated",
+      "status": "supported",
+      "kind": "configuration_template",
+      "source_terms": ["anisha"],
+      "template": {
+        "operator": "OR",
+        "nodes": [
+          {"operator": "OR", "cpeMatch": [{"$term": "anisha"}, {"$term": "anisha"}]}
+        ]
+      },
+      "installations": ["anisha_exact"],
+      "asset_id": "asset-1",
+      "expected": {"satisfied": true, "vulnerable_installations": ["anisha_exact"]},
+      "justification": "The same staged vulnerable criterion is repeated in an OR node; the emitted CVE-to-installation relationship must remain unique."
+    },
+    {
+      "id": "missing_structured_configuration_status",
+      "status": "supported",
+      "kind": "audit_status",
+      "arguments": {
+        "configuration_count": 0,
+        "criterion_hits": 0,
+        "matched_asset_count": 0,
+        "normalized_configuration_flag": true
+      },
+      "expected": "configuration_flag_true_but_raw_configuration_missing",
+      "justification": "A normalized configuration flag without any structured configuration in available raw records is reported as missing rather than inferred."
+    },
+    {
+      "id": "no_installed_product_match_status",
+      "status": "supported",
+      "kind": "audit_status",
+      "arguments": {
+        "configuration_count": 1,
+        "criterion_hits": 0,
+        "matched_asset_count": 0,
+        "normalized_configuration_flag": true
+      },
+      "expected": "no_installed_product_version_matched_supported_criteria",
+      "justification": "Structured criteria with no supported inventory hits are distinct from missing structured configuration data."
+    }
+  ]
+}
