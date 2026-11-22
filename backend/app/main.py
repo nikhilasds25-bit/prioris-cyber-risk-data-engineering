@@ -4,11 +4,12 @@ from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import desc, func, select, text
 from sqlalchemy.orm import Session
 from starlette.middleware.base import BaseHTTPMiddleware
-from starlette.responses import JSONResponse
 
 from app.config import get_settings
 from app.database import engine, get_db
 from app.models import DashboardSnapshot, ExposureRecord
+from app.auth import router as auth_router
+from app.organizations import router as organizations_router
 
 settings = get_settings()
 logging.basicConfig(level=settings.log_level.upper())
@@ -16,8 +17,8 @@ logger = logging.getLogger("prioris.api")
 
 app = FastAPI(
     title="PRIORIS API",
-    version="0.1.0",
-    description="Read API for evidence-preserving PRIORIS dashboard snapshots.",
+    version="0.2.0",
+    description="PRIORIS demo read API and enterprise identity foundation.",
     docs_url="/docs",
     redoc_url="/redoc",
 )
@@ -26,8 +27,8 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.allowed_origins,
     allow_credentials=False,
-    allow_methods=["GET"],
-    allow_headers=["Content-Type", "X-Request-ID"],
+    allow_methods=["GET", "POST", "OPTIONS"],
+    allow_headers=["Authorization", "Content-Type", "X-Request-ID", "X-Organization-ID"],
 )
 
 
@@ -42,6 +43,8 @@ class SecurityHeadersMiddleware(BaseHTTPMiddleware):
 
 
 app.add_middleware(SecurityHeadersMiddleware)
+app.include_router(auth_router)
+app.include_router(organizations_router)
 
 
 @app.get("/", tags=["service"])
@@ -68,11 +71,15 @@ def readiness():
 
 
 def latest_snapshot(db: Session) -> DashboardSnapshot:
+    # The public synthetic demo must never select an organisation-owned snapshot.
     snapshot = db.scalar(
-        select(DashboardSnapshot).order_by(desc(DashboardSnapshot.generated_at)).limit(1)
+        select(DashboardSnapshot)
+        .where(DashboardSnapshot.organization_id.is_(None), DashboardSnapshot.is_synthetic.is_(True))
+        .order_by(desc(DashboardSnapshot.generated_at))
+        .limit(1)
     )
     if snapshot is None:
-        raise HTTPException(status_code=404, detail="No dashboard snapshot has been imported")
+        raise HTTPException(status_code=404, detail="No synthetic demo snapshot has been imported")
     return snapshot
 
 
@@ -103,6 +110,7 @@ def exposure_page(
     snapshot = latest_snapshot(db)
     filters = [
         ExposureRecord.snapshot_id == snapshot.id,
+        ExposureRecord.organization_id.is_(None),
         ExposureRecord.view_name == view_name,
     ]
     if asset_id:
@@ -112,9 +120,7 @@ def exposure_page(
     if risk_tier:
         filters.append(ExposureRecord.risk_tier == risk_tier.lower())
 
-    total = db.scalar(
-        select(func.count()).select_from(ExposureRecord).where(*filters)
-    ) or 0
+    total = db.scalar(select(func.count()).select_from(ExposureRecord).where(*filters)) or 0
     rows = db.scalars(
         select(ExposureRecord)
         .where(*filters)

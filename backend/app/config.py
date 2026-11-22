@@ -8,6 +8,8 @@ class Settings(BaseSettings):
     database_url: str | None = None
     cors_origins: str = "http://localhost:5173"
     log_level: str = "INFO"
+    auth_secret_key: str | None = None
+    access_token_expire_minutes: int = 60
 
     model_config = SettingsConfigDict(
         env_file=".env",
