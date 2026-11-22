@@ -1,0 +1,12 @@
+{
+  "headers": [
+    {
+      "source": "/data/(.*\\.json\\.gz)",
+      "headers": [
+        { "key": "Content-Type", "value": "application/json" },
+        { "key": "Content-Encoding", "value": "gzip" },
+        { "key": "Cache-Control", "value": "public, max-age=3600" }
+      ]
+    }
+  ]
+}
