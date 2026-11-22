@@ -1,0 +1,27 @@
+﻿# PRIORIS Render Blueprint
+# Review database pricing before applying.
+
+services:
+  - type: web
+    name: prioris-api
+    runtime: python
+    plan: free
+    region: singapore
+    buildCommand: pip install -r backend/requirements.txt
+    startCommand: cd backend && uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health/ready
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: prioris-db
+          property: connectionString
+      - key: ENVIRONMENT
+        value: production
+      - key: CORS_ORIGINS
+        value: https://prioris-cyber-risk-data-engineering.vercel.app
+
+databases:
+  - name: prioris-db
+    plan: basic-256mb
+    region: singapore
+    databaseName: prioris
