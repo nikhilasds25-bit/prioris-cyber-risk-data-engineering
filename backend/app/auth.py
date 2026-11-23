@@ -4,16 +4,20 @@ import re
 import uuid
 
 from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from pydantic import BaseModel, Field, field_validator
-from sqlalchemy import select
+from sqlalchemy import delete, select
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from app.config import get_settings
 from app.database import get_db
-from app.models import AuditLog, Organization, OrganizationMembership, User
-from app.security import create_access_token, hash_password, verify_password
+from app.dependencies import get_current_user
+from app.models import AuditLog, Organization, OrganizationMembership, RevokedToken, User
+from app.security import create_access_token, decode_access_token_payload, hash_password, verify_password
 
 router = APIRouter(prefix="/api/v1/auth", tags=["authentication"])
+_bearer = HTTPBearer(auto_error=False)
 
 
 class Credentials(BaseModel):
@@ -43,7 +47,15 @@ class RegistrationRequest(Credentials):
 
 class LoginRequest(BaseModel):
     email: str
-    password: str
+    password: str = Field(min_length=1, max_length=128)
+
+    @field_validator("email")
+    @classmethod
+    def normalise_email(cls, value: str) -> str:
+        value = value.strip().lower()
+        if len(value) > 320 or not re.fullmatch(r"[^@\s]+@[^@\s]+\.[^@\s]+", value):
+            raise ValueError("A valid email address is required")
+        return value
 
 
 def ensure_auth_configured() -> None:
@@ -94,26 +106,29 @@ def token_response(user: User, db: Session) -> dict:
 @router.post("/register", status_code=status.HTTP_201_CREATED)
 def register(payload: RegistrationRequest, db: Session = Depends(get_db)):
     ensure_auth_configured()
-    if db.scalar(select(User).where(User.email == payload.email)):
-        raise HTTPException(status_code=409, detail="An account with this email already exists")
-
     organization = Organization(name=payload.organization_name, slug=make_slug(payload.organization_name))
     user = User(email=payload.email, password_hash=hash_password(payload.password))
-    db.add_all([organization, user])
-    db.flush()
-    membership = OrganizationMembership(
-        organization_id=organization.id, user_id=user.id, role="admin"
-    )
-    db.add(membership)
-    db.add(AuditLog(
-        organization_id=organization.id,
-        actor_user_id=user.id,
-        action="organization.created",
-        target_type="organization",
-        target_id=str(organization.id),
-        details={"source": "self_service_registration"},
-    ))
-    db.commit()
+    try:
+        db.add_all([organization, user])
+        db.flush()
+        membership = OrganizationMembership(
+            organization_id=organization.id, user_id=user.id, role="admin"
+        )
+        db.add(membership)
+        db.add(AuditLog(
+            organization_id=organization.id,
+            actor_user_id=user.id,
+            action="organization.created",
+            target_type="organization",
+            target_id=str(organization.id),
+            details={"source": "self_service_registration"},
+        ))
+        db.commit()
+    except IntegrityError as exc:
+        db.rollback()
+        if db.scalar(select(User).where(User.email == payload.email)):
+            raise HTTPException(status_code=409, detail="An account with this email already exists") from exc
+        raise
     db.refresh(user)
     return token_response(user, db)
 
@@ -121,8 +136,7 @@ def register(payload: RegistrationRequest, db: Session = Depends(get_db)):
 @router.post("/login")
 def login(payload: LoginRequest, db: Session = Depends(get_db)):
     ensure_auth_configured()
-    email = payload.email.strip().lower()
-    user = db.scalar(select(User).where(User.email == email))
+    user = db.scalar(select(User).where(User.email == payload.email))
     if not user or not user.is_active or not verify_password(payload.password, user.password_hash):
         raise HTTPException(status_code=401, detail="Invalid email or password")
     db.add(AuditLog(
@@ -137,14 +151,30 @@ def login(payload: LoginRequest, db: Session = Depends(get_db)):
 
 
 @router.post("/logout")
-def logout():
-    # Access tokens are short-lived and stateless. The client must discard its token.
-    return {"status": "ok", "message": "Discard the access token on the client"}
+def logout(
+    user: User = Depends(get_current_user),
+    credentials: HTTPAuthorizationCredentials | None = Depends(_bearer),
+    db: Session = Depends(get_db),
+):
+    payload = decode_access_token_payload(credentials.credentials) if credentials else None
+    if not payload or payload.get("sub") != str(user.id):
+        raise HTTPException(status_code=401, detail="Invalid or expired access token")
+    expires_at = datetime.fromtimestamp(payload["exp"], tz=timezone.utc)
+    db.execute(delete(RevokedToken).where(RevokedToken.expires_at < datetime.now(timezone.utc)))
+    db.add(RevokedToken(token_id=payload["jti"], user_id=user.id, expires_at=expires_at))
+    db.add(AuditLog(
+        actor_user_id=user.id,
+        action="auth.logout",
+        target_type="user",
+        target_id=str(user.id),
+        details={},
+    ))
+    db.commit()
+    return {"status": "ok", "message": "Access token revoked"}
 
 
 @router.get("/me")
-def me(user: User = Depends(__import__("app.dependencies", fromlist=["get_current_user"]).get_current_user),
-       db: Session = Depends(get_db)):
+def me(user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     memberships = db.scalars(
         select(OrganizationMembership).where(
             OrganizationMembership.user_id == user.id,

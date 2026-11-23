@@ -1,6 +1,7 @@
 import logging
 from fastapi import Depends, FastAPI, HTTPException, Query, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 from sqlalchemy import desc, func, select, text
 from sqlalchemy.orm import Session
 from starlette.middleware.base import BaseHTTPMiddleware
@@ -9,6 +10,8 @@ from app.config import get_settings
 from app.database import engine, get_db
 from app.models import DashboardSnapshot, ExposureRecord
 from app.auth import router as auth_router
+from app.enterprise import router as enterprise_router
+from app.enterprise_data import MAX_UPLOAD_BYTES
 from app.organizations import router as organizations_router
 
 settings = get_settings()
@@ -27,7 +30,7 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.allowed_origins,
     allow_credentials=False,
-    allow_methods=["GET", "POST", "OPTIONS"],
+    allow_methods=["GET", "POST", "PATCH", "OPTIONS"],
     allow_headers=["Authorization", "Content-Type", "X-Request-ID", "X-Organization-ID"],
 )
 
@@ -45,6 +48,24 @@ class SecurityHeadersMiddleware(BaseHTTPMiddleware):
 app.add_middleware(SecurityHeadersMiddleware)
 app.include_router(auth_router)
 app.include_router(organizations_router)
+app.include_router(enterprise_router)
+
+
+@app.middleware("http")
+async def limit_enterprise_upload_body(request: Request, call_next):
+    upload_paths = {"/api/v1/enterprise/imports", "/api/v1/enterprise/imports/preview"}
+    content_length = request.headers.get("content-length")
+    if request.method == "POST" and request.url.path in upload_paths and content_length:
+        try:
+            request_size = int(content_length)
+        except ValueError:
+            return JSONResponse(status_code=400, content={"detail": "Invalid Content-Length header"})
+        if request_size > MAX_UPLOAD_BYTES + 64 * 1024:
+            return JSONResponse(
+                status_code=413,
+                content={"detail": f"Upload exceeds the {MAX_UPLOAD_BYTES // (1024 * 1024)} MiB limit"},
+            )
+    return await call_next(request)
 
 
 @app.get("/", tags=["service"])

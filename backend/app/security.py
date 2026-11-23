@@ -1,6 +1,7 @@
 """Password hashing and signed access-token helpers for PRIORIS."""
 from datetime import datetime, timedelta, timezone
 import hashlib
+import uuid
 import jwt
 from jwt import InvalidTokenError
 from pwdlib import PasswordHash
@@ -39,6 +40,7 @@ def create_access_token(user_id: str) -> tuple[str, int]:
     now = datetime.now(timezone.utc)
     payload = {
         "sub": user_id,
+        "jti": uuid.uuid4().hex,
         "iat": now,
         "exp": now + timedelta(seconds=expires_in),
         "iss": "prioris-api",
@@ -48,6 +50,12 @@ def create_access_token(user_id: str) -> tuple[str, int]:
 
 
 def decode_access_token(token: str) -> str | None:
+    payload = decode_access_token_payload(token)
+    subject = payload.get("sub") if payload else None
+    return subject if isinstance(subject, str) else None
+
+
+def decode_access_token_payload(token: str) -> dict | None:
     try:
         payload = jwt.decode(
             token,
@@ -55,9 +63,10 @@ def decode_access_token(token: str) -> str | None:
             algorithms=[ALGORITHM],
             audience="prioris-client",
             issuer="prioris-api",
-            options={"require": ["sub", "exp", "iat"]},
+            options={"require": ["sub", "exp", "iat", "jti"]},
         )
-        subject = payload.get("sub")
-        return subject if isinstance(subject, str) else None
+        if not isinstance(payload.get("jti"), str):
+            return None
+        return payload
     except (InvalidTokenError, RuntimeError):
         return None

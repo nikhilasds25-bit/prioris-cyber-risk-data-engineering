@@ -17,6 +17,8 @@ services:
           property: connectionString
       - key: ENVIRONMENT
         value: production
+      - key: AUTH_SECRET_KEY
+        generateValue: true
       - key: CORS_ORIGINS
         value: https://prioris-cyber-risk-data-engineering.vercel.app
 
@@ -25,4 +27,3 @@ databases:
     plan: free
     region: singapore
     databaseName: prioris
-

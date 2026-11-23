@@ -1,11 +1,12 @@
 """Organisation membership, invitation and audit APIs."""
 from datetime import datetime, timedelta, timezone
+import re
 import secrets
 import uuid
 
 from fastapi import APIRouter, Depends, HTTPException, Query, status
-from pydantic import BaseModel, Field, field_validator
-from sqlalchemy import desc, select
+from pydantic import BaseModel, Field, field_validator, model_validator
+from sqlalchemy import desc, func, select
 from sqlalchemy.orm import Session
 
 from app.database import get_db
@@ -18,13 +19,13 @@ router = APIRouter(prefix="/api/v1/organizations", tags=["organizations"])
 
 class InvitationRequest(BaseModel):
     email: str
-    role: str = Field(pattern="^(analyst|viewer)$")
+    role: str = Field(pattern="^(admin|analyst|viewer)$")
 
     @field_validator("email")
     @classmethod
     def normalise_email(cls, value: str) -> str:
         value = value.strip().lower()
-        if "@" not in value or len(value) > 320:
+        if len(value) > 320 or not re.fullmatch(r"[^@\s]+@[^@\s]+\.[^@\s]+", value):
             raise ValueError("A valid email address is required")
         return value
 
@@ -32,6 +33,17 @@ class InvitationRequest(BaseModel):
 class AcceptInvitationRequest(BaseModel):
     token: str = Field(min_length=32, max_length=128)
     password: str | None = Field(default=None, min_length=12, max_length=128)
+
+
+class MembershipUpdateRequest(BaseModel):
+    role: str | None = Field(default=None, pattern="^(admin|analyst|viewer)$")
+    is_active: bool | None = None
+
+    @model_validator(mode="after")
+    def require_update(self):
+        if self.role is None and self.is_active is None:
+            raise ValueError("Provide a role or active-state change")
+        return self
 
 
 def audit(db: Session, organization_id, actor_id, action: str, target_type=None, target_id=None, details=None):
@@ -105,9 +117,9 @@ def create_invitation(
 @router.post("/invitations/accept", status_code=status.HTTP_201_CREATED)
 def accept_invitation(payload: AcceptInvitationRequest, db: Session = Depends(get_db)):
     invitation = db.scalar(
-        select(OrganizationInvitation).where(
-            OrganizationInvitation.token_hash == hash_invitation_token(payload.token)
-        )
+        select(OrganizationInvitation)
+        .where(OrganizationInvitation.token_hash == hash_invitation_token(payload.token))
+        .with_for_update()
     )
     now = datetime.now(timezone.utc)
     if invitation is None or invitation.accepted_at is not None or invitation.expires_at <= now:
@@ -153,10 +165,7 @@ def list_members(
     rows = db.execute(
         select(User, OrganizationMembership)
         .join(OrganizationMembership, OrganizationMembership.user_id == User.id)
-        .where(
-            OrganizationMembership.organization_id == membership.organization_id,
-            OrganizationMembership.is_active.is_(True),
-        )
+        .where(OrganizationMembership.organization_id == membership.organization_id)
         .order_by(User.email)
     ).all()
     return [
@@ -164,10 +173,54 @@ def list_members(
             "user_id": str(user.id),
             "email": user.email,
             "role": member.role,
+            "is_active": member.is_active,
             "joined_at": member.created_at,
         }
         for user, member in rows
     ]
+
+
+@router.patch("/current/members/{user_id}")
+def update_member(
+    user_id: uuid.UUID,
+    payload: MembershipUpdateRequest,
+    membership: OrganizationMembership = Depends(require_roles("admin")),
+    user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    target = db.scalar(
+        select(OrganizationMembership).where(
+            OrganizationMembership.organization_id == membership.organization_id,
+            OrganizationMembership.user_id == user_id,
+        )
+    )
+    if target is None:
+        raise HTTPException(status_code=404, detail="Organization member not found")
+    resulting_role = payload.role if payload.role is not None else target.role
+    resulting_active = payload.is_active if payload.is_active is not None else target.is_active
+    removes_admin = target.role == "admin" and (resulting_role != "admin" or not resulting_active)
+    if removes_admin:
+        db.scalar(
+            select(Organization).where(Organization.id == membership.organization_id).with_for_update()
+        )
+        active_admins = db.scalar(
+            select(func.count()).select_from(OrganizationMembership).where(
+                OrganizationMembership.organization_id == membership.organization_id,
+                OrganizationMembership.role == "admin",
+                OrganizationMembership.is_active.is_(True),
+            )
+        ) or 0
+        if active_admins <= 1:
+            raise HTTPException(status_code=409, detail="The last active organization admin cannot be removed")
+    target.role = resulting_role
+    target.is_active = resulting_active
+    audit(
+        db, membership.organization_id, user.id, "organization.member_updated",
+        "membership", str(target.id),
+        {"user_id": str(user_id), "role": resulting_role, "is_active": resulting_active},
+    )
+    db.commit()
+    return {"user_id": str(user_id), "role": target.role, "is_active": target.is_active}
 
 
 @router.get("/current/audit-logs")

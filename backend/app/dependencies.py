@@ -7,8 +7,8 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app.database import get_db
-from app.models import Organization, OrganizationMembership, User
-from app.security import decode_access_token
+from app.models import Organization, OrganizationMembership, RevokedToken, User
+from app.security import decode_access_token_payload
 
 _bearer = HTTPBearer(auto_error=False)
 
@@ -19,9 +19,10 @@ def get_current_user(
 ) -> User:
     if credentials is None:
         raise HTTPException(status_code=401, detail="Bearer access token required")
-    subject = decode_access_token(credentials.credentials)
-    if not subject:
+    payload = decode_access_token_payload(credentials.credentials)
+    if not payload:
         raise HTTPException(status_code=401, detail="Invalid or expired access token")
+    subject = payload["sub"]
     try:
         user_id = uuid.UUID(subject)
     except ValueError:
@@ -29,6 +30,8 @@ def get_current_user(
     user = db.scalar(select(User).where(User.id == user_id, User.is_active.is_(True)))
     if user is None:
         raise HTTPException(status_code=401, detail="User account is unavailable")
+    if db.get(RevokedToken, payload["jti"]) is not None:
+        raise HTTPException(status_code=401, detail="Access token has been revoked")
     return user
 
 

@@ -7,6 +7,7 @@ import {
   ArrowUpDown,
   ArrowUpRight,
   Boxes,
+  Building2,
   ChevronDown,
   ChevronLeft,
   ChevronRight,
@@ -51,6 +52,7 @@ import {
   loadReviewQueue,
   loadSummary,
 } from "./lib/data";
+import EnterpriseWorkspace from "./EnterpriseWorkspace";
 import {
   formatNumber,
   formatScore,
@@ -98,6 +100,7 @@ const navigation: NavigationItem[] = [
   { id: "exposures", label: "Exposure Analysis", icon: Target, group: "Workspace" },
   { id: "analytics", label: "Risk Analytics", icon: Activity, group: "Insights" },
   { id: "review", label: "Review Queue", icon: FileSearch, group: "Insights" },
+  { id: "enterprise", label: "Enterprise Workspace", icon: Building2, group: "Insights" },
   { id: "methodology", label: "Methodology", icon: CircleHelp, group: "System" },
 ];
 
@@ -108,6 +111,7 @@ const pageDescriptions: Record<PageId, string> = {
   exposures: "Inspect confirmed software-to-vulnerability relationships.",
   analytics: "Understand how risk is distributed across your estate.",
   review: "Cases requiring additional evidence or analyst attention.",
+  enterprise: "Secure company onboarding, tenant-scoped inventory, and reported risk evidence.",
   methodology: "Scoring definitions, evidence policy, and dataset boundaries.",
 };
 
@@ -585,6 +589,14 @@ function App() {
     );
   }
   if (error || !summary) {
+    if (page === "enterprise") {
+      return (
+        <main className="enterprise-standalone">
+          <button className="enterprise-button enterprise-button-quiet" onClick={() => setPage("overview")}>Back to Synthetic Demo</button>
+          <EnterpriseWorkspace />
+        </main>
+      );
+    }
     return (
       <div className="error-screen">
         <div className="empty-icon"><AlertCircle size={23} /></div>
@@ -592,6 +604,7 @@ function App() {
         <p>{error || "No dashboard summary was found."}</p>
         <p className="muted">Generate the static dashboard export, then refresh this page.</p>
         <button className="button-primary" onClick={() => window.location.reload()}>Retry</button>
+        <button className="button-secondary" onClick={() => setPage("enterprise")}>Open Enterprise Workspace</button>
       </div>
     );
   }
@@ -611,7 +624,7 @@ function App() {
         </div>
         <div className="workspace-switch">
           <div className="workspace-icon"><Command size={15} /></div>
-          {!collapsed && <div><strong>Security workspace</strong><span>Current snapshot</span></div>}
+          {!collapsed && <div><strong>{page === "enterprise" ? "Company workspace" : "Security workspace"}</strong><span>{page === "enterprise" ? "Private tenant data" : "Current snapshot"}</span></div>}
           {!collapsed && <ChevronDown size={14} className="workspace-chevron" />}
         </div>
         <nav className="side-nav" aria-label="Main navigation">
@@ -642,7 +655,7 @@ function App() {
           ))}
         </nav>
         <div className="sidebar-bottom">
-          <div className="data-source-indicator"><span className="live-dot" />{!collapsed && <><div><b>Dataset ready</b><small>Local snapshot</small></div><Database size={15} /></>}</div>
+          <div className="data-source-indicator"><span className="live-dot" />{!collapsed && <><div><b>{page === "enterprise" ? "Tenant workspace" : "Dataset ready"}</b><small>{page === "enterprise" ? "Organisation scoped" : "Local snapshot"}</small></div><Database size={15} /></>}</div>
           {!collapsed && <div className="sidebar-footnote">PRIORIS · Risk intelligence<br />Framework v0.1</div>}
         </div>
       </aside>
@@ -654,10 +667,10 @@ function App() {
             <span>Workspace</span><ChevronRight size={13} /><strong>{navigation.find((item) => item.id === page)?.label}</strong>
           </div>
           <div className="topbar-actions">
-            <SearchBox value={query} onChange={setQuery} placeholder="Search assets, CVEs, software..." />
-            <div className="snapshot-pill"><span className="snapshot-dot" />{summary.snapshotDate ? `Snapshot ${summary.snapshotDate}` : "Current snapshot"}</div>
-            <span className="environment-pill"><span />{summary.datasetEnvironment || "Synthetic Demo"}</span>
-            <button className="profile-button" aria-label="Profile placeholder" title="Profile placeholder">P</button>
+            {page !== "enterprise" && <SearchBox value={query} onChange={setQuery} placeholder="Search assets, CVEs, software..." />}
+            <div className="snapshot-pill"><span className="snapshot-dot" />{page === "enterprise" ? "Tenant data" : summary.snapshotDate ? `Snapshot ${summary.snapshotDate}` : "Current snapshot"}</div>
+            <span className="environment-pill"><span />{page === "enterprise" ? "Private Tenant" : summary.datasetEnvironment || "Synthetic Demo"}</span>
+            {page !== "enterprise" && <button className="profile-button" aria-label="Profile placeholder" title="Profile placeholder">P</button>}
           </div>
         </header>
 
@@ -676,7 +689,7 @@ function App() {
                   <p>{pageDescriptions[page]}</p>
                 </div>
                 <div className="heading-actions">
-                  <span className="data-badge"><span />{summary.synthetic ? "Synthetic Demo" : summary.datasetEnvironment}</span>
+                  <span className="data-badge"><span />{page === "enterprise" ? "Private Tenant" : summary.synthetic ? "Synthetic Demo" : summary.datasetEnvironment}</span>
                 </div>
               </div>
 
@@ -713,6 +726,7 @@ function App() {
                 />
               )}
               {page === "methodology" && <MethodologyPage summary={summary} />}
+              {page === "enterprise" && <EnterpriseWorkspace />}
           </motion.div>
           <footer className="app-footer">
             <span>PRIORIS · Distributed Cyber Risk Intelligence and Prioritization Framework</span>
