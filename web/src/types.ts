@@ -159,7 +159,8 @@ export type PageId =
   | "exposures"
   | "analytics"
   | "review"
-  | "methodology";
+  | "methodology"
+  | "enterprise";
 
 export interface ExportedDashboardData {
   summary: DashboardSummary;
